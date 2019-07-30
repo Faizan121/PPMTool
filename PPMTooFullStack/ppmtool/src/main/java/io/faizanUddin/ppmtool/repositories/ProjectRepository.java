@@ -1,4 +1,4 @@
-package io.faizanUddin.ppmtool.repository;
+package io.faizanUddin.ppmtool.repositories;
 
 import io.faizanUddin.ppmtool.domain.Project;
 import org.springframework.data.repository.CrudRepository;
