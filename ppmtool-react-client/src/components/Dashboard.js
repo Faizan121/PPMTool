@@ -3,14 +3,15 @@ import ProjectItem from './Project/ProjectItem';
 import Header from './Layout/Header';
 
 
+
  class Dashboard extends Component  {
 
     render () {
 
         return (
-            <div>
+            <div  >
             <Header/>
-            <h1>Welocme to Dashboard!</h1>
+            <h1 className = "alert alert-warning" >Welocme to Dashboard!</h1>
             <ProjectItem />
             </div>
         );
