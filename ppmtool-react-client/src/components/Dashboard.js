@@ -1,4 +1,6 @@
-import react, { Component } from 'react';
+import React, { Component } from 'react';
+import ProjectItem from './Project/ProjectItem';
+import Header from './Layout/Header';
 
 
  class Dashboard extends Component  {
@@ -7,9 +9,11 @@ import react, { Component } from 'react';
 
         return (
             <div>
+            <Header/>
             <h1>Welocme to Dashboard!</h1>
+            <ProjectItem />
             </div>
-        )
+        );
 
 
     }
