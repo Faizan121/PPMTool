@@ -2,7 +2,7 @@ import {GET_PROJECTS, GET_PROJECT} from '../actions/types';
 
 const initialState = {
     projects: [],
-    prject: {}
+    project: {}
 }
 
 export default function(state = initialState, action) {
