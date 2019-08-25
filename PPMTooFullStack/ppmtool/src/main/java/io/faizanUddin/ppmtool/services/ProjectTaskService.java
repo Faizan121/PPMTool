@@ -25,16 +25,18 @@ public class ProjectTaskService {
 
         Integer backlogSequence = backlog.getPTSequence();
         backlogSequence++;
+        backlog.setPTSequence(backlogSequence);
         projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence);
         projectTask.setProjectIdentifier(projectIdentifier);
 
-//        if (projectTask.getPriority() == 0 || projectTask.getPriority() == null){
-//            projectTask.setPriority(3);
-//        }
+        //System.out.println("Priority: " + projectTask.getPriority());
+
+        if (projectTask.getPriority() == null || projectTask.getPriority() == 0 ){
+            projectTask.setPriority(3);
+        }
         if (projectTask.getStatus() == null || projectTask.getStatus() == ""){
             projectTask.setStatus("TO_DO");
         }
-
         return projectTaskRepository.save(projectTask);
     }
 }
