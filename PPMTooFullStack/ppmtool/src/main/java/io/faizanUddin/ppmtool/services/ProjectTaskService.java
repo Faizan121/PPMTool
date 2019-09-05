@@ -2,8 +2,11 @@ package io.faizanUddin.ppmtool.services;
 
 
 import io.faizanUddin.ppmtool.domain.Backlog;
+import io.faizanUddin.ppmtool.domain.Project;
 import io.faizanUddin.ppmtool.domain.ProjectTask;
+import io.faizanUddin.ppmtool.exceptions.ProjectNotFoundException;
 import io.faizanUddin.ppmtool.repositories.BacklogRepository;
+import io.faizanUddin.ppmtool.repositories.ProjectRepository;
 import io.faizanUddin.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,32 +18,48 @@ public class ProjectTaskService {
     private BacklogRepository backlogRepository;
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
-
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public ProjectTask addProjectTask (String projectIdentifier, ProjectTask projectTask){
 
-        Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+        try {
 
-        projectTask.setBacklog(backlog);
+            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
 
-        Integer backlogSequence = backlog.getPTSequence();
-        backlogSequence++;
-        backlog.setPTSequence(backlogSequence);
-        projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence);
-        projectTask.setProjectIdentifier(projectIdentifier);
+            projectTask.setBacklog(backlog);
 
-        //System.out.println("Priority: " + projectTask.getPriority());
+            Integer backlogSequence = backlog.getPTSequence();
+            backlogSequence++;
+            backlog.setPTSequence(backlogSequence);
+            projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence);
+            projectTask.setProjectIdentifier(projectIdentifier);
 
-        if (projectTask.getPriority() == null || projectTask.getPriority() == 0 ){
-            projectTask.setPriority(3);
+            //System.out.println("Priority: " + projectTask.getPriority());
+
+            if (projectTask.getPriority() == null || projectTask.getPriority() == 0 ){
+                projectTask.setPriority(3);
+            }
+            if (projectTask.getStatus() == null || projectTask.getStatus() == ""){
+                projectTask.setStatus("TO_DO");
+            }
+            return projectTaskRepository.save(projectTask);
+
         }
-        if (projectTask.getStatus() == null || projectTask.getStatus() == ""){
-            projectTask.setStatus("TO_DO");
+        catch(Exception e){
+            throw new ProjectNotFoundException("Project Not found");
         }
-        return projectTaskRepository.save(projectTask);
+
+
     }
 
     public Iterable<ProjectTask> findBacklogById(String id) {
+
+        Project project = projectRepository.findByProjectIdentifier(id);
+
+        if (project == null){
+            throw new ProjectNotFoundException("Project with id" + id + "does not exist");
+        }
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
