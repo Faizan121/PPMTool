@@ -56,10 +56,6 @@ class ProjectBoard extends Component {
         };
 
         boardContent = boardAlgorithm(errors,project_tasks);
-
-
-        
-        
         
         return (
             <div className="container">
