@@ -36,13 +36,14 @@ public class ProjectTaskService {
             projectTask.setProjectIdentifier(projectIdentifier);
 
             //System.out.println("Priority: " + projectTask.getPriority());
-
-            if (projectTask.getPriority() == null || projectTask.getPriority() == 0 ){
-                projectTask.setPriority(3);
-            }
             if (projectTask.getStatus() == null || projectTask.getStatus() == ""){
                 projectTask.setStatus("TO_DO");
             }
+
+            if (projectTask.getPriority() == 0 || projectTask.getPriority() == null){
+                projectTask.setPriority(3);
+            }
+
             return projectTaskRepository.save(projectTask);
 
         }
