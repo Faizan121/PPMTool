@@ -1,12 +1,17 @@
 package io.faizanUddin.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
-public class User {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +29,7 @@ public class User {
     private String password;
 
     @Transient
-    private String confirmPaasword;
+    private String confirmPasword;
 
 
     private Date created_At;
@@ -74,11 +79,11 @@ public class User {
     }
 
     public String getConfirmPaasword() {
-        return confirmPaasword;
+        return confirmPasword;
     }
 
     public void setConfirmPaasword(String confirmPaasword) {
-        this.confirmPaasword = confirmPaasword;
+        this.confirmPasword = confirmPaasword;
     }
 
     public Date getCreated_At() {
@@ -95,5 +100,39 @@ public class User {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    /*
+    UserDetails interface methods
+     */
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
     }
 }
