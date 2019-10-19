@@ -4,6 +4,7 @@ package io.faizanUddin.ppmtool.web;
 import io.faizanUddin.ppmtool.domain.User;
 import io.faizanUddin.ppmtool.services.MapValidationErrorService;
 import io.faizanUddin.ppmtool.services.UserService;
+import io.faizanUddin.ppmtool.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,17 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
 
         // validate passwords
+        userValidator.validate(user,result);
+
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
 
         if (errorMap != null){ return errorMap; }
