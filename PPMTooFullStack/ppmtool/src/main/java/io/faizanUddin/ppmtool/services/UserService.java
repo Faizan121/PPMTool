@@ -1,6 +1,7 @@
 package io.faizanUddin.ppmtool.services;
 
 import io.faizanUddin.ppmtool.domain.User;
+import io.faizanUddin.ppmtool.exceptions.UserAlreadyExistException;
 import io.faizanUddin.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,15 +19,19 @@ public class UserService {
 
     public User saveUser(User newUser) {
 
-        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        try {
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
 
-        //username has to be unique (exception)
+            //username has to be unique (exception)
 
-        //make sure that password and confirm password match
-        //we don't persist or show confirmPassword
+            //make sure that password and confirm password match
+            //we don't persist or show confirmPassword
 
-        return userRepository.save(newUser);
-
+            return userRepository.save(newUser);
+        }
+        catch (Exception e){
+            throw new UserAlreadyExistException("Username '"+newUser.getUsername()+ "' already exists");
+        }
 
     }
 
