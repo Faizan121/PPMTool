@@ -4,6 +4,7 @@ import io.faizanUddin.ppmtool.domain.Backlog;
 import io.faizanUddin.ppmtool.domain.Project;
 import io.faizanUddin.ppmtool.domain.User;
 import io.faizanUddin.ppmtool.exceptions.ProjectIdException;
+import io.faizanUddin.ppmtool.exceptions.ProjectNotFoundException;
 import io.faizanUddin.ppmtool.repositories.BacklogRepository;
 import io.faizanUddin.ppmtool.repositories.ProjectRepository;
 import io.faizanUddin.ppmtool.repositories.UserRepository;
@@ -49,32 +50,29 @@ public class ProjectService {
         }
     }
 
-    public Project findProjectByIdentifier(String projectId ) {
+    public Project findProjectByIdentifier(String projectId, String username ) {
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
         if (project == null){
             throw new ProjectIdException("Project Identifier '" + projectId.toUpperCase() +"' does not exist");
         }
-
-         return project;
-
-    }
-
-    public Iterable<Project> getAllProjects() {
-
-        return projectRepository.findAll();
-
-    }
-
-    public void deleteProjectByIdentifier(String projectId) {
-
-        Project project = projectRepository.findByProjectIdentifier(projectId);
-
-        if (project == null) {
-            throw new ProjectIdException("Cannot Project with ID'" + projectId +"' This project does not exist");
+        if (!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project Not found in your account");
         }
-        projectRepository.delete(project);
+        return project;
+    }
+
+    public Iterable<Project> getAllProjects(String username) {
+
+
+        return projectRepository.findAllByProjectLeader(username);
+
+    }
+
+    public void deleteProjectByIdentifier(String projectId, String username) {
+
+        projectRepository.delete(findProjectByIdentifier(projectId,username));
     }
 
 
