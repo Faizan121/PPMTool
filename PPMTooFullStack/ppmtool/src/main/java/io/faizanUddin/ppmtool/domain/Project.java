@@ -55,6 +55,7 @@ public class Project {
 
     }
 
+
     public User getUser() {
         return user;
     }
