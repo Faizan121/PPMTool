@@ -2,7 +2,6 @@ package io.faizanUddin.ppmtool.services;
 
 
 import io.faizanUddin.ppmtool.domain.Backlog;
-import io.faizanUddin.ppmtool.domain.Project;
 import io.faizanUddin.ppmtool.domain.ProjectTask;
 import io.faizanUddin.ppmtool.exceptions.ProjectNotFoundException;
 import io.faizanUddin.ppmtool.repositories.BacklogRepository;
@@ -20,12 +19,14 @@ public class ProjectTaskService {
     private ProjectTaskRepository projectTaskRepository;
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectService projectService;
 
-    public ProjectTask addProjectTask (String projectIdentifier, ProjectTask projectTask){
+    public ProjectTask addProjectTask (String projectIdentifier, ProjectTask projectTask, String username){
 
-        try {
 
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier,username).getBacklog();
+                    //backlogRepository.findByProjectIdentifier(projectIdentifier);
 
             projectTask.setBacklog(backlog);
 
@@ -40,27 +41,16 @@ public class ProjectTaskService {
                 projectTask.setStatus("TO_DO");
             }
 
-            if (projectTask.getPriority() == 0 || projectTask.getPriority() == null){
+            if (projectTask.getPriority() == null || projectTask.getPriority() == 0 ){
                 projectTask.setPriority(3);
             }
 
             return projectTaskRepository.save(projectTask);
-
-        }
-        catch(Exception e){
-            throw new ProjectNotFoundException("Project Not found");
-        }
-
-
     }
 
-    public Iterable<ProjectTask> findBacklogById(String id) {
+    public Iterable<ProjectTask> findBacklogById(String id, String username) {
 
-        Project project = projectRepository.findByProjectIdentifier(id);
-
-        if (project == null){
-            throw new ProjectNotFoundException("Project with id" + id + "does not exist");
-        }
+        projectService.findProjectByIdentifier(id, username);
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
