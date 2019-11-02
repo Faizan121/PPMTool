@@ -4,7 +4,7 @@ import projectReducer from './projectReducer';
 import backlogReducer from './backlogReducer';
 
 export default combineReducers({
-    errors:errorReducer,
+    errors:   errorReducer,
     project : projectReducer,
     backlog : backlogReducer
 
