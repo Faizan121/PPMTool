@@ -37,7 +37,6 @@ if (jwtToken){
   }
 };
 
-
 function App() {
   return (
     <Provider store ={store} >
