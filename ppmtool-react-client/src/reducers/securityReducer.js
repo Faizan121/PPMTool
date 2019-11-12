@@ -1,7 +1,7 @@
 import {SET_CURRENT_USER} from "../actions/types";
 
 const initialState = {
-    users: {},
+    user: {},
     validToken: false
 }
 
