@@ -27,13 +27,11 @@ import classnames from "classnames";
             this.setState({errors:this.props.errors});
         }
     }
-    // componentWillReceiveProps(nextProps){
-
-    //     console.log("error props "+nextProps.errors);        
-    //     if (nextProps.errors){
-    //         this.setState({errors: nextProps.errors});
-    //     }
-    // }
+    componentDidMount(){
+        if(this.props.security.validToken){
+            this.props.history.push("/dashboard");
+        }
+    }
 
     onChange (e) {
             this.setState({ [e.target.name] : e.target.value });
@@ -128,12 +126,14 @@ import classnames from "classnames";
 Register.propTypes = {
 
     errors: PropTypes.object.isRequired,
-    createNewUser: PropTypes.func.isRequired 
+    createNewUser: PropTypes.func.isRequired,
+    security: PropTypes.object.isRequired 
 };
 
 const mapStateToProps = state => ({
 
-    errors: state.errors
+    errors: state.errors,
+    security: state.security
 });
 
 export default connect(mapStateToProps,{createNewUsers})(Register);
